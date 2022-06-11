@@ -17,12 +17,12 @@ public class InfoActivity extends Activity {
         RelativeLayout.LayoutParams lyt = (RelativeLayout.LayoutParams) webView.getLayoutParams();
         lyt.topMargin = getStatusBarHeight();
     }
+
     public int getStatusBarHeight() {
-        int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
+            return getResources().getDimensionPixelSize(resourceId);
         }
-        return result;
+        return 0;
     }
 }
