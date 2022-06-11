@@ -23,12 +23,12 @@ import java.io.File;
 
 public class MainActivity extends Activity {
 
-    public MainActivity activity;
+    public static MainActivity activity;
     public AlertDialog alertDialog;
     public TextView text_welcome;
-    public Button btnConsole;
+    public static Button btnConsole;
     public Button btnNodeRed;
-    public Button btnDashBoard;
+    public static Button btnDashBoard;
     public Button btnInfo;
     private Intent info_intent;
     public static boolean enableNodeRed = false;
@@ -76,7 +76,7 @@ public class MainActivity extends Activity {
             try {
                 Log.d("termux", "refreshing  Node-dashobard");
 
-                btnDashBoard.refreshDrawableState();
+                MainActivity.btnDashBoard.refreshDrawableState();
             } catch (Exception e) {
                 Log.d("termux", "exception from enable btn-dashboard:" + e.getMessage());
             }
