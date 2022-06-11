@@ -25,9 +25,9 @@ public class MainActivity extends Activity {
 
     public static MainActivity activity;
     public AlertDialog alertDialog;
-    public static TextView text_welcome;
-    public Button btnConsole;
-    public static Button btnNodeRed;
+    public TextView text_welcome;
+    public static Button btnConsole;
+    public Button btnNodeRed;
     public static Button btnDashBoard;
     public Button btnInfo;
     private Intent info_intent;
