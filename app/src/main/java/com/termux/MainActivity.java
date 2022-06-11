@@ -19,18 +19,18 @@ import android.widget.TextView;
 import com.termux.app.TermuxActivity;
 import com.termux.app.TermuxService;
 
+import java.io.File;
+
 public class MainActivity extends Activity {
 
     public static MainActivity activity;
     public AlertDialog alertDialog;
+    public static TextView text_welcome;
     public Button btnConsole;
-    private Intent info_intent;
     public static Button btnNodeRed;
     public static Button btnDashBoard;
-    public static TextView text_welcome;
     public Button btnInfo;
-    private Intent console;
-    private Intent node_red;
+    private Intent info_intent;
     public static boolean enableNodeRed = false;
 
     // ActualActivity = 1 means that Main Activity is being used
@@ -61,8 +61,8 @@ public class MainActivity extends Activity {
             } catch (Exception e) {
                 Log.d("termux", "exception from enable btn-red:" + e.getMessage());
             }
-
         }
+
         if (btnDashBoard != null && !btnDashBoard.isEnabled()) {
             Log.d("termux", "entered in If because btnNode.enable is false and MainActivity isnt null");
 
@@ -121,13 +121,15 @@ public class MainActivity extends Activity {
         setContentView(R.layout.activity_main);
 
         activity = this;
-        node_red = new Intent(Intent.ACTION_VIEW, Uri.parse("http://localhost:1880"));
-        btnNodeRed = (Button) findViewById(R.id.btn_node_red);
 
+        text_welcome = (TextView) findViewById(R.id.text_welcome);
+        text_welcome.setPadding(0, getStatusBarHeight(), 0, 0);
+
+        btnNodeRed = (Button) findViewById(R.id.btn_node_red);
         btnNodeRed.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(node_red);
+                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("http://localhost:1880")));
             }
         });
         btnNodeRed.setEnabled(false);
@@ -151,11 +153,7 @@ public class MainActivity extends Activity {
         });
         btnConsole.setEnabled(false);
 
-        text_welcome = (TextView) findViewById(R.id.text_welcome);
-        text_welcome.setPadding(0, getStatusBarHeight(), 0, 0);
-
         info_intent = new Intent(this, InfoActivity.class);
-
         btnInfo = (Button) findViewById(R.id.btn_info);
         btnInfo.setOnClickListener(new View.OnClickListener() {
             @Override
