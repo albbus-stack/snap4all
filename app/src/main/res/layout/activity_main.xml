@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center_horizontal"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="106dp"
+        android:background="#6A1500"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/text_welcome"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:text="Welcome to Snap4all"
+            android:textAppearance="@style/TextAppearance.AppCompat.Large"
+            android:textColor="@android:color/white" />
+    </LinearLayout>
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ffff"
+        android:clipToPadding="true"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="40dp"
+                android:layout_marginRight="40dp"
+                android:paddingBottom="60dp">
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="175dp"
+                    android:layout_gravity="center_horizontal"
+                    android:layout_weight="1"
+                    android:contentDescription="Snap4All Edge App"
+                    android:src="@drawable/snap4all_banner" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginRight="30dp"
+                android:gravity="center_vertical">
+
+                <Button
+                    android:id="@+id/btn_node_red"
+                    style="@android:style/Widget.Material.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_weight="1"
+                    android:background="#6A1500"
+
+                    android:drawableTop="@mipmap/nodered"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:paddingTop="40dp"
+                    android:text="IOT APP Editor"
+                    android:textColor="#ffff" />
+
+                <Button
+                    android:id="@+id/btn_dashboard"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="#6A1500"
+
+                    android:drawableTop="@mipmap/nodered_dashboard"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:paddingTop="40dp"
+                    android:text="Dashboard"
+                    android:textColor="#ffff" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="30dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginRight="30dp"
+                android:gravity="center">
+
+                <Button
+                    android:id="@+id/btn_console"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_weight="1"
+                    android:background="#6A1500"
+                    android:drawableTop="@mipmap/termux"
+                    android:drawablePadding="5dp"
+                    android:gravity="center"
+                    android:paddingTop="40dp"
+                    android:text="Termux Console"
+                    android:textColor="#ffff" />
+
+                <Button
+                    android:id="@+id/btn_info"
+                    style="@style/Widget.AppCompat.Button.Borderless"
+                    android:layout_width="0dp"
+                    android:layout_height="140dp"
+                    android:layout_marginLeft="10dp"
+                    android:layout_weight="1"
+                    android:background="#6A1500"
+                    android:drawableTop="@mipmap/info"
+                    android:drawablePadding="5dp"
+                    android:drawableTint="#ffff"
+                    android:gravity="center"
+                    android:paddingTop="40dp"
+                    android:text="Information"
+                    android:textColor="#ffff" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</LinearLayout>
