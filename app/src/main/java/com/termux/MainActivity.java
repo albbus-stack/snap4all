@@ -19,10 +19,6 @@ import android.widget.TextView;
 import com.termux.app.TermuxActivity;
 import com.termux.app.TermuxService;
 
-import java.io.File;
-
-import javax.print.attribute.standard.RequestingUserName;
-
 public class MainActivity extends Activity {
 
     public static MainActivity activity;
