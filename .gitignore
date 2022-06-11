@@ -9,6 +9,7 @@ build/
 .externalNativeBuild
 .cxx
 *.zip
+*.log
 
 # Crashlytics configuations
 com_crashlytics_export_strings.xml
