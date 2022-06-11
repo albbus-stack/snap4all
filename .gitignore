@@ -23,8 +23,9 @@ local.properties
 # Signing files
 .signing/
 
-# Intellij
+# IDE generated files
 .idea/
+.vscode/
 *.iml
 
 # OS-specific files
