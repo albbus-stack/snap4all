@@ -21,6 +21,8 @@ import com.termux.app.TermuxService;
 
 import java.io.File;
 
+import javax.print.attribute.standard.RequestingUserName;
+
 public class MainActivity extends Activity {
 
     public static MainActivity activity;
@@ -110,12 +112,11 @@ public class MainActivity extends Activity {
     }
 
     public int getStatusBarHeight() {
-        int result = 0;
         int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
         if (resourceId > 0) {
-            result = getResources().getDimensionPixelSize(resourceId);
+            return getResources().getDimensionPixelSize(resourceId);
         }
-        return result;
+        return 0;
     }
 
     @Override
