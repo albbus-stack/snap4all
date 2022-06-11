@@ -34,16 +34,15 @@ public class MainActivity extends Activity {
     private Intent console;
     private Intent node_red;
     public static boolean enableNodeRed = false;
+
+    // ActualActivity = 1 means that Main Activity is being used
+    // ActualActivity = 2 means that TermuxConsole is being used
+    // This is to control what page onResume() should load
     public static int ActualActivity = 1;
-    // ActualActivity = 1 means that Main Activity is being used so onResume has to
-    // show it back.
-    // ActualActivity = 2 means that TermuxConsole is being used so onResume has to
-    // show it back.
 
-    // metodo che permette di abilitare i bottoni quando parte node-red
+    // This method enables the Node Red button when Node-RED has finished
+    // installing.
     public void enableButtons() {
-        Log.d("termux", "enable buttons is being called");
-
         MainActivity.enableNodeRed = true;
 
         if (btnNodeRed != null && !btnNodeRed.isEnabled()) {
@@ -83,35 +82,30 @@ public class MainActivity extends Activity {
             } catch (Exception e) {
                 Log.d("termux", "exception from enable btn-dashboard:" + e.getMessage());
             }
-
         }
-        Log.d("termux", "end of method enable buttons");
-        // if(!btnConsole.isEnabled())btnConsole.setEnabled(true);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        // permette all'api_method enablebuttons di abilitare i bottoni node-red e
-        // dashboard
         activity = this;
+
         if (enableNodeRed) {
             this.enableButtons();
             if (!btnConsole.isEnabled())
                 btnConsole.setEnabled(true);
         }
 
-        // if Termux has been installed and console is off turn it on.
+        // This enables the Console button after Termux has finished installing.
         if (TermuxActivity.installed && !btnConsole.isEnabled())
             btnConsole.setEnabled(true);
     }
 
     @Override
     public void onBackPressed() {
-        // bisogna ricordare che l'ultimo Activity visibile era MainActivity
+        // Last accessed activity was MainActivity so we have to memorize that.
         ActualActivity = 1;
-        // minimize App serve per far finta di chiudere l'app dopo il BackPressed della
-        // schermata principale.
+        // Then minimize the app, hiding it from the user.
         minimizeApp();
     }
 
@@ -140,6 +134,7 @@ public class MainActivity extends Activity {
             }
         });
         btnNodeRed.setEnabled(false);
+
         btnDashBoard = (Button) findViewById(R.id.btn_dashboard);
         btnDashBoard.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -148,19 +143,19 @@ public class MainActivity extends Activity {
             }
         });
         btnDashBoard.setEnabled(false);
-        btnConsole = (Button) findViewById(R.id.btn_console);
-        btnConsole.setEnabled(false);
-        text_welcome = (TextView) findViewById(R.id.text_welcome);
-        text_welcome.setPadding(0, getStatusBarHeight(), 0, 0);
 
+        btnConsole = (Button) findViewById(R.id.btn_console);
         btnConsole.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ActualActivity = 2;
                 moveToConsole();
-
             }
         });
+        btnConsole.setEnabled(false);
+
+        text_welcome = (TextView) findViewById(R.id.text_welcome);
+        text_welcome.setPadding(0, getStatusBarHeight(), 0, 0);
 
         info_intent = new Intent(this, InfoActivity.class);
 
@@ -176,6 +171,7 @@ public class MainActivity extends Activity {
         if (!rebooted.exists()) {
             btnNodeRed.setVisibility(View.INVISIBLE);
             btnDashBoard.setVisibility(View.INVISIBLE);
+
             alertDialog = new AlertDialog.Builder(this).create();
             alertDialog.setTitle("Information");
             alertDialog.setMessage(
@@ -183,10 +179,9 @@ public class MainActivity extends Activity {
             try {
                 alertDialog.show();
             } catch (WindowManager.BadTokenException e) {
-                // Activity already dismissed - ignore.
+                // Activity already dismissed --ignore.
             }
         }
-
     }
 
     public void moveToConsole() {
