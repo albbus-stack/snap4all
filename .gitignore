@@ -35,3 +35,6 @@ local.properties
 .swp
 ehthumbs.db
 Thumbs.db
+
+*.gradle
+*.properties
