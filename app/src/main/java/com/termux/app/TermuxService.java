@@ -23,6 +23,8 @@ import android.provider.Settings;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 
+import androidx.core.app.NotificationCompat;
+
 import com.termux.R;
 import com.termux.api.ToastAPI;
 import com.termux.terminal.EmulatorDebug;
@@ -98,7 +100,7 @@ public final class TermuxService extends Service implements SessionChangedCallba
     /** If the user has executed the {@link #ACTION_STOP_SERVICE} intent. */
     boolean mWantsToStop = false;
 
-    @SuppressLint("Wakelock")
+    @SuppressLint({"Wakelock", "InvalidWakeLockTag", "BatteryLife"})
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         String action = intent.getAction();
@@ -111,7 +113,7 @@ public final class TermuxService extends Service implements SessionChangedCallba
             if (mWakeLock == null) {
                 PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
                 mWakeLock = pm.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, EmulatorDebug.LOG_TAG);
-                mWakeLock.acquire();
+                mWakeLock.acquire(10*60*1000L /*10 minutes*/);
 
                 // http://tools.android.com/tech-docs/lint-in-studio-2-3#TOC-WifiManager-Leak
                 WifiManager wm = (WifiManager) getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -206,7 +208,7 @@ public final class TermuxService extends Service implements SessionChangedCallba
                 Log.d("termux2", "creating file on /data/data/com.termux/files/home/.termux/boot/"+ " returned: "+result);
             }
 
-            String string = "#!/data/data/com.termux/files/usr/bin/sh\n" +
+            String fileContent = "#!/data/data/com.termux/files/usr/bin/sh\n" +
                 "termux-wake-lock\n"+
                 "touch " + HOME_PATH + "/rebooted\n"+
                 "[ -f $PREFIX/bin/node-red ] || ( termux-toast \"Updating repository\" && termux-vibrate )\n"+
@@ -228,26 +230,24 @@ public final class TermuxService extends Service implements SessionChangedCallba
                 "[ -d $PREFIX/lib/node_modules/node-red/node_modules/node-red-contrib-snap4city-user ] || ( termux-toast \"Installing node-red-contrib-snap4city-user nodes\" && termux-vibrate ) \n"+
                 "[ -d $PREFIX/lib/node_modules/node-red/node_modules/node-red-contrib-snap4city-user ] || npm install git+https://github.com/disit/node-red-contrib-snap4city-user.git\n"+
 
-
                 "termux-enable-buttons\n"+
                 "termux-toast \"starting node-red\" \n"+
-                "node $PREFIX/bin/node-red\n"
-                ;
+                "node $PREFIX/bin/node-red\n";
 
             try {
                 FileOutputStream fos = new FileOutputStream(new File(HOME_PATH+"/.termux/boot/start"));
-                fos.write(string.getBytes());
+                fos.write(fileContent.getBytes());
                 fos.close();
                 //   executeFileFirst(new File(HOME_PATH+"/.termux/boot/start"));
-            }catch(Exception e){
+            } catch(Exception e) {
                 Log.d("termux2",""+e.getMessage());
             }
-            // mark first time has runned.
+
+            // Remember in local storage that we already ran the script.
             SharedPreferences.Editor editor = prefs.edit();
             editor.putBoolean("firstTime", true);
-            editor.commit();
+            editor.apply();
         }
-        
     }
 
     /** Update the shown foreground service notification after making any changes that affect it. */
@@ -300,15 +300,26 @@ public final class TermuxService extends Service implements SessionChangedCallba
 
         Resources res = getResources();
         Intent exitIntent = new Intent(this, TermuxService.class).setAction(ACTION_STOP_SERVICE);
-        builder.addAction(android.R.drawable.ic_delete, res.getString(R.string.notification_action_exit), PendingIntent.getService(this, 0, exitIntent, 0));
+
+        Notification.Action.Builder exitAction = new Notification.Action.Builder(
+            android.R.drawable.ic_delete,
+            res.getString(R.string.notification_action_exit),
+            PendingIntent.getService(this, 0, exitIntent, 0)
+        );
+        builder.addAction(exitAction.build());
 
         String newWakeAction = wakeLockHeld ? ACTION_UNLOCK_WAKE : ACTION_LOCK_WAKE;
         Intent toggleWakeLockIntent = new Intent(this, TermuxService.class).setAction(newWakeAction);
-        String actionTitle = res.getString(wakeLockHeld ?
+        String wakeActionTitle = res.getString(wakeLockHeld ?
             R.string.notification_action_wake_unlock :
             R.string.notification_action_wake_lock);
-        int actionIcon = wakeLockHeld ? android.R.drawable.ic_lock_idle_lock : android.R.drawable.ic_lock_lock;
-        builder.addAction(actionIcon, actionTitle, PendingIntent.getService(this, 0, toggleWakeLockIntent, 0));
+        int wakeActionIcon = wakeLockHeld ? android.R.drawable.ic_lock_idle_lock : android.R.drawable.ic_lock_lock;
+        Notification.Action.Builder wakeAction = new Notification.Action.Builder(
+            wakeActionIcon,
+            wakeActionTitle,
+            PendingIntent.getService(this, 0, toggleWakeLockIntent, 0)
+        );
+        builder.addAction(wakeAction.build());
 
         return builder.build();
     }
