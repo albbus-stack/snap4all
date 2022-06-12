@@ -13,6 +13,8 @@ import android.os.Build;
 import android.provider.Settings;
 import android.text.TextUtils;
 
+import androidx.core.app.NotificationCompat;
+
 import com.termux.R;
 import com.termux.api.util.ResultReturner;
 import com.termux.api.util.TermuxApiLogger;
@@ -24,6 +26,8 @@ import java.util.Objects;
 import java.util.UUID;
 
 public class NotificationAPI {
+
+    private static final String NOTIFICATION_CHANNEL_ID = "termux_notification_channel";
 
     public static final String TERMUX_SERVICE = "com.termux.app.TermuxService";
     public static final String ACTION_EXECUTE = "com.termux.service_execute";
@@ -88,7 +92,7 @@ public class NotificationAPI {
 
         String groupKey = intent.getStringExtra("group");
 
-        final Notification.Builder notification = new Notification.Builder(context);
+        NotificationCompat.Builder notification = new NotificationCompat.Builder(context.getApplicationContext(), NOTIFICATION_CHANNEL_ID);
         notification.setSmallIcon(R.drawable.ic_event_note_black_24dp);
         notification.setColor(0xFF000000);
         notification.setContentTitle(title);
@@ -106,7 +110,7 @@ public class NotificationAPI {
                 Bitmap myBitmap = BitmapFactory.decodeFile(imgFile.getAbsolutePath());
 
                 notification.setLargeIcon(myBitmap)
-                    .setStyle(new Notification.BigPictureStyle()
+                    .setStyle(new NotificationCompat.BigPictureStyle()
                     .bigPicture(myBitmap));
             }
         }
@@ -126,12 +130,12 @@ public class NotificationAPI {
                 PendingIntent playIntent = createAction(context, mediaPlay);
                 PendingIntent nextIntent = createAction(context, mediaNext);
 
-                notification.addAction(new Notification.Action(android.R.drawable.ic_media_previous, "previous", previousIntent));
-                notification.addAction(new Notification.Action(android.R.drawable.ic_media_pause, "pause", pauseIntent));
-                notification.addAction(new Notification.Action(android.R.drawable.ic_media_play, "play", playIntent));
-                notification.addAction(new Notification.Action(android.R.drawable.ic_media_next, "next", nextIntent));
+                notification.addAction(new NotificationCompat.Action.Builder(android.R.drawable.ic_media_previous, "previous", previousIntent).build());
+                notification.addAction(new NotificationCompat.Action.Builder(android.R.drawable.ic_media_pause, "pause", pauseIntent).build());
+                notification.addAction(new NotificationCompat.Action.Builder(android.R.drawable.ic_media_play, "play", playIntent).build());
+                notification.addAction(new NotificationCompat.Action.Builder(android.R.drawable.ic_media_next, "next", nextIntent).build());
 
-                notification.setStyle(new Notification.MediaStyle()
+                notification.setStyle(new androidx.media.app.NotificationCompat.MediaStyle()
                     .setShowActionsInCompactView(0, 1, 3));
             }
         }
@@ -168,7 +172,7 @@ public class NotificationAPI {
             String buttonAction = intent.getStringExtra("button_action_" + button);
             if (buttonText != null && buttonAction != null) {
                 PendingIntent pi = createAction(context, buttonAction);
-                notification.addAction(new Notification.Action(android.R.drawable.ic_input_add, buttonText, pi));
+                notification.addAction(new NotificationCompat.Action.Builder(android.R.drawable.ic_input_add, buttonText, pi).build());
             }
         }
 
@@ -185,7 +189,7 @@ public class NotificationAPI {
 
                 if (!TextUtils.isEmpty(inputString)) {
                     if (inputString.contains("\n")) {
-                        Notification.BigTextStyle style = new Notification.BigTextStyle();
+                        NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
                         style.bigText(inputString);
                         notification.setStyle(style);
                     } else {
