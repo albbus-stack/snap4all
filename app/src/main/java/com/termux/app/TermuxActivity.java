@@ -167,7 +167,6 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
         if(MainActivity.ActualActivity == 1 && !first_activity_options){
             // non vogliamo mostrare il primo perche' lo fa l'installer (bloccando il pulsante console)
             startActivity(MainOptions);
-
         }
     }
 
@@ -513,7 +512,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
             if (mIsVisible) {
                 TermuxInstaller.setupIfNeeded(TermuxActivity.this, () -> {
 					// START TERMUX MERGE
- 					MainActivity.activity.btnConsole.setEnabled(true);
+ 					MainActivity.btnConsole.setEnabled(true);
 					// END TERMUX MERGE
                     if (mTermService == null) return; // Activity might have been destroyed.
                     try {
@@ -536,7 +535,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
             }
         } else {
 			// START TERMUX MERGE
-			MainActivity.activity.btnConsole.setEnabled(true);
+			MainActivity.btnConsole.setEnabled(true);
 			// END TERMUX MERGE
             Intent i = getIntent();
             if (i != null && Intent.ACTION_RUN.equals(i.getAction())) {
