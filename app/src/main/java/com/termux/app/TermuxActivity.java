@@ -67,6 +67,7 @@ import java.util.regex.Pattern;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.core.content.ContextCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.viewpager.widget.PagerAdapter;
 import androidx.viewpager.widget.ViewPager;
@@ -236,7 +237,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
 
         if (mIsUsingBlackUI) {
             findViewById(R.id.left_drawer).setBackgroundColor(
-                getResources().getColor(android.R.color.background_dark)
+                ContextCompat.getColor(getApplicationContext(),android.R.color.background_dark)
             );
         }
 
@@ -468,7 +469,7 @@ public final class TermuxActivity extends Activity implements ServiceConnection 
                 TextView firstLineView = row.findViewById(R.id.row_line);
                 if (mIsUsingBlackUI) {
                     firstLineView.setBackground(
-                        getResources().getDrawable(R.drawable.selected_session_background_black)
+                        ContextCompat.getDrawable(getApplicationContext(),R.drawable.selected_session_background_black)
                     );
                 }
                 String name = sessionAtRow.mSessionName;
