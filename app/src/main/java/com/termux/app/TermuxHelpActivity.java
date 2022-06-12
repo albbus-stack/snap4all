@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.view.ViewGroup;
+import android.webkit.WebResourceRequest;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
@@ -38,15 +39,15 @@ public final class TermuxHelpActivity extends Activity {
 
         mWebView.setWebViewClient(new WebViewClient() {
             @Override
-            public boolean shouldOverrideUrlLoading(WebView view, String url) {
-                if (url.startsWith("https://wiki.termux.com")) {
+            public boolean shouldOverrideUrlLoading(WebView view, WebResourceRequest url) {
+                if (url.toString().startsWith("https://wiki.termux.com")) {
                     // Inline help.
                     setContentView(progressLayout);
                     return false;
                 }
 
                 try {
-                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url)).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
+                    startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse(url.toString())).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK));
                 } catch (ActivityNotFoundException e) {
                     // Android TV does not have a system browser.
                     setContentView(progressLayout);

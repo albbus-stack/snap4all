@@ -55,14 +55,11 @@ public class FingerprintAPI {
     protected static final String AUTH_RESULT_FAILURE = "AUTH_RESULT_FAILURE";
     protected static final String AUTH_RESULT_UNKNOWN = "AUTH_RESULT_UNKNOWN";
 
-
-
     // store result of fingerprint initialization / authentication
     protected static FingerprintResult fingerprintResult = new FingerprintResult();
 
     // have we posted our result back?
     protected static boolean postedResult = false;
-
 
     /**
      * Handles setup of fingerprint sensor and writes Fingerprint result to console
@@ -70,20 +67,14 @@ public class FingerprintAPI {
     static void onReceive(final Context context, final Intent intent) {
         resetFingerprintResult();
 
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
-            FingerprintManagerCompat fingerprintManagerCompat = FingerprintManagerCompat.from(context);
-            // make sure we have a valid fingerprint sensor before attempting to launch Fingerprint activity
-            if (validateFingerprintSensor(context, fingerprintManagerCompat)) {
-                Intent fingerprintIntent = new Intent(context, FingerprintActivity.class);
-                fingerprintIntent.putExtras(intent.getExtras());
-                fingerprintIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
-                context.startActivity(fingerprintIntent);
-            } else {
-                postFingerprintResult(context, intent, fingerprintResult);
-            }
+        FingerprintManagerCompat fingerprintManagerCompat = FingerprintManagerCompat.from(context);
+        // make sure we have a valid fingerprint sensor before attempting to launch Fingerprint activity
+        if (validateFingerprintSensor(context, fingerprintManagerCompat)) {
+            Intent fingerprintIntent = new Intent(context, FingerprintActivity.class);
+            fingerprintIntent.putExtras(intent.getExtras());
+            fingerprintIntent.setFlags(FLAG_ACTIVITY_NEW_TASK);
+            context.startActivity(fingerprintIntent);
         } else {
-            // pre-marshmallow is unsupported
-            appendFingerprintError(ERROR_UNSUPPORTED_OS_VERSION);
             postFingerprintResult(context, intent, fingerprintResult);
         }
     }
@@ -136,8 +127,6 @@ public class FingerprintAPI {
         }
         return result;
     }
-
-
 
     /**
      * Activity that is necessary for authenticating w/ fingerprint sensor
@@ -251,7 +240,6 @@ public class FingerprintAPI {
     protected static void setAuthResult(String authResult) {
         fingerprintResult.authResult = authResult;
     }
-
 
     /**
      * Simple class to encapsulate information about result of a fingerprint authentication attempt

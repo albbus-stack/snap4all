@@ -510,15 +510,12 @@ public class DialogActivity extends AppCompatActivity {
             super(activity);
         }
 
+        @SuppressWarnings("deprecation")
         @Override
         String getResult() {
             String result;
 
-            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
-                result = String.format(Locale.getDefault(), "%02d:%02d", widgetView.getHour(), widgetView.getMinute());
-            } else {
-                result = String.format(Locale.getDefault(), "%02d:%02d", widgetView.getCurrentHour(), widgetView.getCurrentMinute());
-            }
+            result = String.format(Locale.getDefault(), "%02d:%02d", widgetView.getHour(), widgetView.getMinute());
             return result;
         }
 
