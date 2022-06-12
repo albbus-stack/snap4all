@@ -510,7 +510,6 @@ public class DialogActivity extends AppCompatActivity {
             super(activity);
         }
 
-        @SuppressWarnings("deprecation")
         @Override
         String getResult() {
             String result;
